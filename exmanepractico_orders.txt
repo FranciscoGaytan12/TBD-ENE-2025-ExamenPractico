@@ -1,0 +1,1656 @@
+MySQL Shell 8.0.41
+
+Copyright (c) 2016, 2025, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \c --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 19
+Server version: 8.0.41 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > create database prueba1;
+Query OK, 1 row affected (0.0166 sec)
+ MySQL  localhost:3306 ssl  SQL > CREATE TABLE Clientes (
+                               ->     CustomerID VARCHAR(20) PRIMARY KEY,
+                               ->     CustomerName VARCHAR(100) NOT NULL,
+                               ->     Segment VARCHAR(50)
+                               -> );
+ERROR: 1046 (3D000): No database selected
+ MySQL  localhost:3306 ssl  SQL > use prueba1;
+Default schema set to `prueba1`.
+Fetching global names, object names from `prueba1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  prueba1  SQL > CREATE TABLE Clientes (
+                                        ->     CustomerID VARCHAR(20) PRIMARY KEY,
+                                        ->     CustomerName VARCHAR(100) NOT NULL,
+                                        ->     Segment VARCHAR(50)
+                                        -> );
+Query OK, 0 rows affected (0.0522 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > CREATE TABLE Ubicaciones (
+                                        ->     PostalCode VARCHAR(20) PRIMARY KEY,
+                                        ->     City VARCHAR(100) NOT NULL,
+                                        ->     State VARCHAR(100) NOT NULL,
+                                        ->     Country VARCHAR(100) NOT NULL,
+                                        ->     Region VARCHAR(50)
+                                        -> );
+Query OK, 0 rows affected (0.0506 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > CREATE TABLE Categorias (
+                                        ->     CategoryID VARCHAR(20) PRIMARY KEY,
+                                        ->     CategoryName VARCHAR(100) NOT NULL
+                                        -> );
+Query OK, 0 rows affected (0.0499 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > CREATE TABLE SubCategorias (
+                                        ->     SubCategoryID VARCHAR(20) PRIMARY KEY,
+                                        ->     SubCategoryName VARCHAR(100) NOT NULL,
+                                        ->     CategoryID VARCHAR(20) NOT NULL
+                                        ->     -- Sin declaración de FOREIGN KEY
+                                        -> );
+Query OK, 0 rows affected (0.0438 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > CREATE TABLE Productos (
+                                        ->     ProductID VARCHAR(20) PRIMARY KEY,
+                                        ->     ProductName VARCHAR(100) NOT NULL,
+                                        ->     SubCategoryID VARCHAR(20) NOT NULL
+                                        ->     -- Sin declaración de FOREIGN KEY
+                                        -> );
+Query OK, 0 rows affected (0.0473 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > CREATE TABLE ModoEnvio (
+                                        ->     ShipModeID VARCHAR(20) PRIMARY KEY,
+                                        ->     ShipModeName VARCHAR(100) NOT NULL
+                                        -> );
+Query OK, 0 rows affected (0.0528 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > CREATE TABLE Pedidos (
+                                        ->     OrderID VARCHAR(20) PRIMARY KEY,
+                                        ->     RowID VARCHAR(20) UNIQUE NOT NULL,
+                                        ->     OrderDate DATE NOT NULL,
+                                        ->     ShipDate DATE,
+                                        ->     ShipModeID VARCHAR(20) NOT NULL,
+                                        ->     CustomerID VARCHAR(20) NOT NULL,
+                                        ->     PostalCode VARCHAR(20) NOT NULL
+                                        ->     -- Sin declaraciones de FOREIGN KEY
+                                        -> );
+Query OK, 0 rows affected (0.0955 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > CREATE TABLE DetallesPedido (
+                                        ->     DetailID INT AUTO_INCREMENT PRIMARY KEY,
+                                        ->     OrderID VARCHAR(20) NOT NULL,
+                                        ->     ProductID VARCHAR(20) NOT NULL,
+                                        ->     Quantity INT NOT NULL,
+                                        ->     Sales DECIMAL(10,2) NOT NULL,
+                                        ->     Discount DECIMAL(3,2),
+                                        ->     Profit DECIMAL(10,2)
+                                        ->     -- Sin declaraciones de FOREIGN KEY
+                                        -> );
+Query OK, 0 rows affected (0.0423 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > select * from Productos limit 100;
++-----------------+--------------------------------------------------------------------------------------------+---------------+
+| ProductID       | ProductName                                                                                | SubCategoryID |
++-----------------+--------------------------------------------------------------------------------------------+---------------+
+| FUR-BO-10000112 | Bush Birmingham Collection Bookcase, Dark Cherry                                           | Bookcases     |
+| FUR-BO-10000330 | Sauder Camden County Barrister Bookcase, Planked Cherry Finish                             | Bookcases     |
+| FUR-BO-10000362 | Sauder Inglewood Library Bookcases                                                         | Bookcases     |
+| FUR-BO-10000468 | O'Sullivan 2-Shelf Heavy-Duty Bookcases                                                    | Bookcases     |
+| FUR-BO-10000711 | Hon Metal Bookcases, Gray                                                                  | Bookcases     |
+| FUR-BO-10000780 | O'Sullivan Plantations 2-Door Library in Landvery Oak                                      | Bookcases     |
+| FUR-BO-10001337 | O'Sullivan Living Dimensions 2-Shelf Bookcases                                             | Bookcases     |
+| FUR-BO-10001519 | O'Sullivan 3-Shelf Heavy-Duty Bookcases                                                    | Bookcases     |
+| FUR-BO-10001567 | Bush Westfield Collection Bookcases, Dark Cherry Finish, Fully Assembled                   | Bookcases     |
+| FUR-BO-10001601 | Sauder Mission Library with Doors, Fruitwood Finish                                        | Bookcases     |
+| FUR-BO-10001608 | Hon Metal Bookcases, Black                                                                 | Bookcases     |
+| FUR-BO-10001619 | O'Sullivan Cherrywood Estates Traditional Bookcase                                         | Bookcases     |
+| FUR-BO-10001798 | Bush Somerset Collection Bookcase                                                          | Bookcases     |
+| FUR-BO-10001811 | Atlantic Metals Mobile 5-Shelf Bookcases, Custom Colors                                    | Bookcases     |
+| FUR-BO-10001918 | Sauder Forest Hills Library with Doors, Woodland Oak Finish                                | Bookcases     |
+| FUR-BO-10001972 | O'Sullivan 4-Shelf Bookcase in Odessa Pine                                                 | Bookcases     |
+| FUR-BO-10002202 | Atlantic Metals Mobile 2-Shelf Bookcases, Custom Colors                                    | Bookcases     |
+| FUR-BO-10002206 | Bush Saratoga Collection 5-Shelf Bookcase, Hanover Cherry, *Special Order                  | Bookcases     |
+| FUR-BO-10002213 | DMI Eclipse Executive Suite Bookcases                                                      | Bookcases     |
+| FUR-BO-10002268 | Sauder Barrister Bookcases                                                                 | Bookcases     |
+| FUR-BO-10002545 | Atlantic Metals Mobile 3-Shelf Bookcases, Custom Colors                                    | Bookcases     |
+| FUR-BO-10002598 | Hon Metal Bookcases, Putty                                                                 | Bookcases     |
+| FUR-BO-10002613 | Atlantic Metals Mobile 4-Shelf Bookcases, Custom Colors                                    | Bookcases     |
+| FUR-BO-10002824 | Bush Mission Pointe Library                                                                | Bookcases     |
+| FUR-BO-10002853 | O'Sullivan 5-Shelf Heavy-Duty Bookcases                                                    | Bookcases     |
+| FUR-BO-10002916 | Rush Hierlooms Collection 1" Thick Stackable Bookcases"                                    | Bookcases     |
+| FUR-BO-10003034 | O'Sullivan Elevations Bookcase, Cherry Finish                                              | Bookcases     |
+| FUR-BO-10003159 | Sauder Camden County Collection Libraries, Planked Cherry Finish                           | Bookcases     |
+| FUR-BO-10003272 | O'Sullivan Living Dimensions 5-Shelf Bookcases                                             | Bookcases     |
+| FUR-BO-10003404 | Global Adaptabilites Bookcase, Cherry/Storm Gray Finish                                    | Bookcases     |
+| FUR-BO-10003433 | Sauder Cornerstone Collection Library                                                      | Bookcases     |
+| FUR-BO-10003441 | Bush Westfield Collection Bookcases, Fully Assembled                                       | Bookcases     |
+| FUR-BO-10003450 | Bush Westfield Collection Bookcases, Dark Cherry Finish                                    | Bookcases     |
+| FUR-BO-10003546 | Hon 4-Shelf Metal Bookcases                                                                | Bookcases     |
+| FUR-BO-10003660 | Bush Cubix Collection Bookcases, Fully Assembled                                           | Bookcases     |
+| FUR-BO-10003893 | Sauder Camden County Collection Library                                                    | Bookcases     |
+| FUR-BO-10003894 | Safco Value Mate Steel Bookcase, Baked Enamel Finish on Steel, Black                       | Bookcases     |
+| FUR-BO-10003965 | O'Sullivan Manor Hill 2-Door Library in Brianna Oak                                        | Bookcases     |
+| FUR-BO-10003966 | Sauder Facets Collection Library, Sky Alder Finish                                         | Bookcases     |
+| FUR-BO-10004015 | Bush Andora Bookcase, Maple/Graphite Gray Finish                                           | Bookcases     |
+| FUR-BO-10004218 | Bush Heritage Pine Collection 5-Shelf Bookcase, Albany Pine Finish, *Special Order         | Bookcases     |
+| FUR-BO-10004357 | O'Sullivan Living Dimensions 3-Shelf Bookcases                                             | Bookcases     |
+| FUR-BO-10004360 | Rush Hierlooms Collection Rich Wood Bookcases                                              | Bookcases     |
+| FUR-BO-10004409 | Safco Value Mate Series Steel Bookcases, Baked Enamel Finish on Steel, Gray                | Bookcases     |
+| FUR-BO-10004467 | Bestar Classic Bookcase                                                                    | Bookcases     |
+| FUR-BO-10004690 | O'Sullivan Cherrywood Estates Traditional Barrister Bookcase                               | Bookcases     |
+| FUR-BO-10004695 | O'Sullivan 2-Door Barrister Bookcase in Odessa Pine                                        | Bookcases     |
+| FUR-BO-10004709 | Bush Westfield Collection Bookcases, Medium Cherry Finish                                  | Bookcases     |
+| FUR-BO-10004834 | Riverside Palais Royal Lawyers Bookcase, Royale Cherry Finish                              | Bookcases     |
+| FUR-CH-10000015 | Hon Multipurpose Stacking Arm Chairs                                                       | Chairs        |
+| FUR-CH-10000155 | Global Comet Stacking Armless Chair                                                        | Chairs        |
+| FUR-CH-10000225 | Global Geo Office Task Chair, Gray                                                         | Chairs        |
+| FUR-CH-10000229 | Global Enterprise Series Seating High-Back Swivel/Tilt Chairs                              | Chairs        |
+| FUR-CH-10000309 | Global Comet Stacking Arm Chair                                                            | Chairs        |
+| FUR-CH-10000422 | Global Highback Leather Tilter in Burgundy                                                 | Chairs        |
+| FUR-CH-10000454 | Hon Deluxe Fabric Upholstered Stacking Chairs, Rounded Back                                | Chairs        |
+| FUR-CH-10000513 | High-Back Leather Manager's Chair                                                          | Chairs        |
+| FUR-CH-10000553 | Metal Folding Chairs, Beige, 4/Carton                                                      | Chairs        |
+| FUR-CH-10000595 | Safco Contoured Stacking Chairs                                                            | Chairs        |
+| FUR-CH-10000665 | Global Airflow Leather Mesh Back Chair, Black                                              | Chairs        |
+| FUR-CH-10000749 | Office Star - Ergonomic Mid Back Chair with 2-Way Adjustable Arms                          | Chairs        |
+| FUR-CH-10000785 | Global Ergonomic Managers Chair                                                            | Chairs        |
+| FUR-CH-10000847 | Global Executive Mid-Back Manager's Chair                                                  | Chairs        |
+| FUR-CH-10000863 | Novimex Swivel Fabric Task Chair                                                           | Chairs        |
+| FUR-CH-10000988 | Hon Olson Stacker Stools                                                                   | Chairs        |
+| FUR-CH-10001146 | Global Value Mid-Back Manager's Chair, Gray                                                | Chairs        |
+| FUR-CH-10001190 | Global Deluxe High-Back Office Chair in Storm                                              | Chairs        |
+| FUR-CH-10001215 | Global Troy Executive Leather Low-Back Tilter                                              | Chairs        |
+| FUR-CH-10001270 | Harbour Creations Steel Folding Chair                                                      | Chairs        |
+| FUR-CH-10001394 | Global Leather Executive Chair                                                             | Chairs        |
+| FUR-CH-10001482 | Office Star - Mesh Screen back chair with Vinyl seat                                       | Chairs        |
+| FUR-CH-10001545 | Hon Comfortask Task/Swivel Chairs                                                          | Chairs        |
+| FUR-CH-10001708 | Office Star - Contemporary Swivel Chair with Padded Adjustable Arms and Flex Back          | Chairs        |
+| FUR-CH-10001714 | Global Leather & Oak Executive Chair, Burgundy                                             | Chairs        |
+| FUR-CH-10001797 | Safco Chair Connectors, 6/Carton                                                           | Chairs        |
+| FUR-CH-10001802 | Hon Every-Day Chair Series Swivel Task Chairs                                              | Chairs        |
+| FUR-CH-10001854 | Office Star - Professional Matrix Back Chair with 2-to-1 Synchro Tilt and Mesh Fabric Seat | Chairs        |
+| FUR-CH-10001891 | Global Deluxe Office Fabric Chairs                                                         | Chairs        |
+| FUR-CH-10001973 | Office Star Flex Back Scooter Chair with White Frame                                       | Chairs        |
+| FUR-CH-10002017 | SAFCO Optional Arm Kit for Workspace Cribbage Stacking Chair                               | Chairs        |
+| FUR-CH-10002024 | HON 5400 Series Task Chairs for Big and Tall                                               | Chairs        |
+| FUR-CH-10002044 | Office Star - Contemporary Task Swivel chair with 2-way adjustable arms, Plum              | Chairs        |
+| FUR-CH-10002073 | Hon Olson Stacker Chairs                                                                   | Chairs        |
+| FUR-CH-10002084 | Hon Mobius Operator's Chair                                                                | Chairs        |
+| FUR-CH-10002126 | Hon Deluxe Fabric Upholstered Stacking Chairs                                              | Chairs        |
+| FUR-CH-10002304 | Global Stack Chair without Arms, Black                                                     | Chairs        |
+| FUR-CH-10002317 | Global Enterprise Series Seating Low-Back Swivel/Tilt Chairs                               | Chairs        |
+| FUR-CH-10002320 | Hon Pagoda Stacking Chairs                                                                 | Chairs        |
+| FUR-CH-10002331 | Hon 4700 Series Mobuis Mid-Back Task Chairs with Adjustable Arms                           | Chairs        |
+| FUR-CH-10002335 | Hon GuestStacker Chair                                                                     | Chairs        |
+| FUR-CH-10002372 | Office Star - Ergonomically Designed Knee Chair                                            | Chairs        |
+| FUR-CH-10002439 | Iceberg Nesting Folding Chair, 19w x 6d x 43h                                              | Chairs        |
+| FUR-CH-10002602 | DMI Arturo Collection Mission-style Design Wood Chair                                      | Chairs        |
+| FUR-CH-10002647 | Situations Contoured Folding Chairs, 4/Set                                                 | Chairs        |
+| FUR-CH-10002758 | Hon Deluxe Fabric Upholstered Stacking Chairs, Squared Back                                | Chairs        |
+| FUR-CH-10002774 | Global Deluxe Stacking Chair, Gray                                                         | Chairs        |
+| FUR-CH-10002780 | Office Star - Task Chair with Contemporary Loop Arms                                       | Chairs        |
+| FUR-CH-10002880 | Global High-Back Leather Tilter, Burgundy                                                  | Chairs        |
+| FUR-CH-10002961 | Leather Task Chair, Black                                                                  | Chairs        |
+| FUR-CH-10002965 | Global Leather Highback Executive Chair with Pneumatic Height Adjustment, Black            | Chairs        |
++-----------------+--------------------------------------------------------------------------------------------+---------------+
+100 rows in set (0.0023 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > show tables;
++-------------------+
+| Tables_in_prueba1 |
++-------------------+
+| productos         |
+| subcategorias     |
+| ubicaciones       |
++-------------------+
+3 rows in set (0.0038 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > CREATE TABLE Clientes (
+                                        ->     CustomerID VARCHAR(20) PRIMARY KEY,
+                                        ->     CustomerName VARCHAR(100) NOT NULL,
+                                        ->     Segment VARCHAR(50)
+                                        -> );
+Query OK, 0 rows affected (0.0185 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > CREATE TABLE Categorias (
+                                        ->     CategoryID VARCHAR(20) PRIMARY KEY,
+                                        ->     CategoryName VARCHAR(100) NOT NULL
+                                        -> );
+Query OK, 0 rows affected (0.0263 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > CREATE TABLE ModoEnvio (
+                                        ->     ShipModeID VARCHAR(20) PRIMARY KEY,
+                                        ->     ShipModeName VARCHAR(100) NOT NULL
+                                        -> );
+Query OK, 0 rows affected (0.0253 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > CREATE TABLE Pedidos (
+                                        ->     OrderID VARCHAR(20) PRIMARY KEY,
+                                        ->     RowID VARCHAR(20) UNIQUE NOT NULL,
+                                        ->     OrderDate DATE NOT NULL,
+                                        ->     ShipDate DATE,
+                                        ->     ShipModeID VARCHAR(20) NOT NULL,
+                                        ->     CustomerID VARCHAR(20) NOT NULL,
+                                        ->     PostalCode VARCHAR(20) NOT NULL
+                                        ->     -- Sin declaraciones de FOREIGN KEY
+                                        -> );
+Query OK, 0 rows affected (0.0402 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > CREATE TABLE DetallesPedido (
+                                        ->     DetailID INT AUTO_INCREMENT PRIMARY KEY,
+                                        ->     OrderID VARCHAR(20) NOT NULL,
+                                        ->     ProductID VARCHAR(20) NOT NULL,
+                                        ->     Quantity INT NOT NULL,
+                                        ->     Sales DECIMAL(10,2) NOT NULL,
+                                        ->     Discount DECIMAL(3,2),
+                                        ->     Profit DECIMAL(10,2)
+                                        ->     -- Sin declaraciones de FOREIGN KEY
+                                        -> );
+Query OK, 0 rows affected (0.0380 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL >
+ MySQL  localhost:3306 ssl  prueba1  SQL > show tables,
+                                        -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',' at line 1
+ MySQL  localhost:3306 ssl  prueba1  SQL > show tables ;
++-------------------+
+| Tables_in_prueba1 |
++-------------------+
+| categorias        |
+| clientes          |
+| detallespedido    |
+| modoenvio         |
+| pedidos           |
+| productos         |
+| subcategorias     |
+| ubicaciones       |
++-------------------+
+8 rows in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > desc modoenvio
+                                        -> ;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| ShipModeID   | varchar(20)  | NO   | PRI | NULL    |       |
+| ShipModeName | varchar(100) | NO   |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+2 rows in set (0.0031 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > select * from modoenvio;
++------------+----------------+
+| ShipModeID | ShipModeName   |
++------------+----------------+
+| 41646      | First Class    |
+| 41647      | Standard Class |
+| 41649      | Standard Class |
+| 41651      | Standard Class |
+| 41652      | Standard Class |
+| 41653      | First Class    |
+| 41654      | Second Class   |
+| 41655      | Second Class   |
+| 41656      | First Class    |
+| 41657      | Second Class   |
+| 41659      | First Class    |
+| 41660      | Second Class   |
+| 41664      | Standard Class |
+| 41665      | Standard Class |
+| 41667      | Standard Class |
+| 41668      | First Class    |
+| 41670      | Standard Class |
+| 41672      | First Class    |
+| 41673      | First Class    |
+| 41674      | Standard Class |
+| 41676      | Second Class   |
+| 41678      | Standard Class |
+| 41679      | First Class    |
+| 41680      | Second Class   |
+| 41682      | Standard Class |
+| 41685      | Standard Class |
+| 41688      | Standard Class |
+| 41689      | Second Class   |
+| 41691      | Standard Class |
+| 41694      | First Class    |
+| 41695      | Standard Class |
+| 41696      | Standard Class |
+| 41697      | Standard Class |
+| 41700      | Standard Class |
+| 41701      | First Class    |
+| 41702      | Same Day       |
+| 41703      | Standard Class |
+| 41704      | Second Class   |
+| 41705      | Second Class   |
+| 41706      | Standard Class |
+| 41707      | Standard Class |
+| 41709      | Second Class   |
+| 41710      | Standard Class |
+| 41711      | Second Class   |
+| 41712      | Standard Class |
+| 41713      | Standard Class |
+| 41714      | Second Class   |
+| 41715      | Standard Class |
+| 41716      | Standard Class |
+| 41717      | Standard Class |
+| 41718      | Second Class   |
+| 41719      | Standard Class |
+| 41720      | Same Day       |
+| 41721      | Standard Class |
+| 41722      | Standard Class |
+| 41723      | Standard Class |
+| 41724      | Standard Class |
+| 41726      | Standard Class |
+| 41727      | Second Class   |
+| 41728      | Standard Class |
+| 41729      | Same Day       |
+| 41730      | Standard Class |
+| 41731      | Standard Class |
+| 41732      | Standard Class |
+| 41733      | Standard Class |
+| 41734      | Standard Class |
+| 41735      | Second Class   |
+| 41736      | First Class    |
+| 41737      | First Class    |
+| 41738      | Standard Class |
+| 41739      | Standard Class |
+| 41741      | Standard Class |
+| 41742      | Second Class   |
+| 41744      | Standard Class |
+| 41745      | Standard Class |
+| 41746      | Second Class   |
+| 41747      | Standard Class |
+| 41749      | Standard Class |
+| 41750      | Second Class   |
+| 41751      | Second Class   |
+| 41752      | Standard Class |
+| 41753      | First Class    |
+| 41754      | Standard Class |
+| 41755      | Standard Class |
+| 41756      | Standard Class |
+| 41758      | Standard Class |
+| 41759      | Standard Class |
+| 41760      | Second Class   |
+| 41761      | Second Class   |
+| 41762      | Standard Class |
+| 41763      | Standard Class |
+| 41764      | First Class    |
+| 41766      | First Class    |
+| 41767      | Standard Class |
+| 41768      | Same Day       |
+| 41769      | Standard Class |
+| 41770      | Standard Class |
+| 41771      | Standard Class |
+| 41773      | Second Class   |
+| 41774      | Second Class   |
+| 41775      | Standard Class |
+| 41776      | Standard Class |
+| 41777      | Standard Class |
+| 41778      | Standard Class |
+| 41779      | Standard Class |
+| 41780      | Standard Class |
+| 41781      | Second Class   |
+| 41782      | Standard Class |
+| 41783      | Standard Class |
+| 41784      | Standard Class |
+| 41785      | Standard Class |
+| 41786      | Standard Class |
+| 41788      | Standard Class |
+| 41789      | First Class    |
+| 41790      | Standard Class |
+| 41791      | Second Class   |
+| 41792      | Standard Class |
+| 41793      | Standard Class |
+| 41795      | Standard Class |
+| 41796      | Second Class   |
+| 41797      | Standard Class |
+| 41799      | First Class    |
+| 41800      | Second Class   |
+| 41801      | Second Class   |
+| 41802      | Standard Class |
+| 41803      | Second Class   |
+| 41804      | Standard Class |
+| 41805      | Same Day       |
+| 41806      | Standard Class |
+| 41807      | Standard Class |
+| 41810      | Standard Class |
+| 41811      | Standard Class |
+| 41812      | Standard Class |
+| 41813      | Second Class   |
+| 41814      | First Class    |
+| 41815      | First Class    |
+| 41816      | First Class    |
+| 41817      | Standard Class |
+| 41818      | First Class    |
+| 41820      | Same Day       |
+| 41821      | Standard Class |
+| 41822      | Standard Class |
+| 41823      | Second Class   |
+| 41824      | Standard Class |
+| 41825      | Standard Class |
+| 41826      | Second Class   |
+| 41827      | First Class    |
+| 41828      | First Class    |
+| 41829      | Standard Class |
+| 41830      | First Class    |
+| 41831      | Standard Class |
+| 41832      | Standard Class |
+| 41833      | Standard Class |
+| 41834      | First Class    |
+| 41835      | Standard Class |
+| 41836      | Standard Class |
+| 41837      | Standard Class |
+| 41838      | Same Day       |
+| 41839      | Standard Class |
+| 41840      | Standard Class |
+| 41841      | Standard Class |
+| 41842      | First Class    |
+| 41843      | First Class    |
+| 41844      | Standard Class |
+| 41845      | Standard Class |
+| 41847      | Standard Class |
+| 41848      | Same Day       |
+| 41849      | Second Class   |
+| 41850      | Second Class   |
+| 41852      | Standard Class |
+| 41853      | Standard Class |
+| 41854      | First Class    |
+| 41856      | First Class    |
+| 41857      | Standard Class |
+| 41858      | Second Class   |
+| 41859      | Standard Class |
+| 41860      | Standard Class |
+| 41861      | Second Class   |
+| 41862      | Second Class   |
+| 41863      | Standard Class |
+| 41864      | Standard Class |
+| 41865      | Standard Class |
+| 41866      | Standard Class |
+| 41867      | Standard Class |
+| 41868      | First Class    |
+| 41869      | First Class    |
+| 41870      | Standard Class |
+| 41871      | Standard Class |
+| 41872      | Second Class   |
+| 41874      | Standard Class |
+| 41875      | Standard Class |
+| 41876      | Second Class   |
+| 41877      | First Class    |
+| 41878      | Second Class   |
+| 41879      | Second Class   |
+| 41880      | Same Day       |
+| 41881      | Standard Class |
+| 41883      | Second Class   |
+| 41884      | Second Class   |
+| 41885      | First Class    |
+| 41886      | First Class    |
+| 41887      | Second Class   |
+| 41889      | Second Class   |
+| 41890      | Standard Class |
+| 41891      | First Class    |
+| 41892      | Standard Class |
+| 41893      | First Class    |
+| 41894      | Standard Class |
+| 41895      | First Class    |
+| 41896      | Standard Class |
+| 41897      | Standard Class |
+| 41898      | First Class    |
+| 41899      | Standard Class |
+| 41900      | Second Class   |
+| 41901      | Standard Class |
+| 41902      | Standard Class |
+| 41903      | Second Class   |
+| 41904      | First Class    |
+| 41905      | Second Class   |
+| 41906      | Standard Class |
+| 41907      | Standard Class |
+| 41908      | Standard Class |
+| 41909      | First Class    |
+| 41910      | Standard Class |
+| 41911      | Standard Class |
+| 41912      | Standard Class |
+| 41913      | Second Class   |
+| 41915      | Standard Class |
+| 41916      | Standard Class |
+| 41917      | Standard Class |
+| 41918      | Standard Class |
+| 41919      | Standard Class |
+| 41920      | Second Class   |
+| 41921      | Standard Class |
+| 41922      | Standard Class |
+| 41924      | Standard Class |
+| 41925      | Standard Class |
+| 41926      | Standard Class |
+| 41927      | First Class    |
+| 41928      | Standard Class |
+| 41929      | First Class    |
+| 41930      | Second Class   |
+| 41931      | Same Day       |
+| 41932      | Second Class   |
+| 41934      | First Class    |
+| 41935      | First Class    |
+| 41936      | Same Day       |
+| 41937      | Second Class   |
+| 41938      | Standard Class |
+| 41940      | Standard Class |
+| 41941      | Standard Class |
+| 41942      | Second Class   |
+| 41943      | First Class    |
+| 41944      | Standard Class |
+| 41945      | Second Class   |
+| 41946      | Second Class   |
+| 41947      | Standard Class |
+| 41948      | Standard Class |
+| 41949      | Standard Class |
+| 41950      | Standard Class |
+| 41951      | Second Class   |
+| 41952      | Standard Class |
+| 41953      | Standard Class |
+| 41954      | Second Class   |
+| 41955      | Same Day       |
+| 41956      | Second Class   |
+| 41957      | Second Class   |
+| 41958      | First Class    |
+| 41959      | Second Class   |
+| 41960      | Second Class   |
+| 41961      | Standard Class |
+| 41962      | First Class    |
+| 41963      | Second Class   |
+| 41964      | Standard Class |
+| 41965      | Standard Class |
+| 41966      | Standard Class |
+| 41967      | Second Class   |
+| 41968      | First Class    |
+| 41969      | First Class    |
+| 41970      | Second Class   |
+| 41971      | Standard Class |
+| 41972      | Standard Class |
+| 41973      | Standard Class |
+| 41974      | Second Class   |
+| 41975      | Standard Class |
+| 41976      | Standard Class |
+| 41977      | First Class    |
+| 41978      | Standard Class |
+| 41979      | Standard Class |
+| 41980      | Standard Class |
+| 41981      | Standard Class |
+| 41982      | Second Class   |
+| 41983      | Standard Class |
+| 41984      | Second Class   |
+| 41985      | Standard Class |
+| 41986      | Standard Class |
+| 41987      | Second Class   |
+| 41988      | Standard Class |
+| 41989      | Standard Class |
+| 41990      | Standard Class |
+| 41991      | First Class    |
+| 41992      | Second Class   |
+| 41993      | Second Class   |
+| 41994      | First Class    |
+| 41995      | First Class    |
+| 41996      | Second Class   |
+| 41997      | Standard Class |
+| 41998      | Standard Class |
+| 41999      | First Class    |
+| 42000      | Standard Class |
+| 42001      | Second Class   |
+| 42002      | Standard Class |
+| 42003      | First Class    |
+| 42004      | Standard Class |
+| 42005      | Second Class   |
+| 42006      | Standard Class |
+| 42007      | First Class    |
+| 42008      | Standard Class |
+| 42009      | Standard Class |
+| 42011      | Standard Class |
+| 42012      | Standard Class |
+| 42013      | Standard Class |
+| 42014      | Standard Class |
+| 42016      | Standard Class |
+| 42017      | Standard Class |
+| 42019      | Standard Class |
+| 42021      | Standard Class |
+| 42022      | Standard Class |
+| 42026      | Standard Class |
+| 42027      | Standard Class |
+| 42028      | Standard Class |
+| 42031      | Standard Class |
+| 42032      | Standard Class |
+| 42033      | Second Class   |
+| 42035      | Second Class   |
+| 42036      | Standard Class |
+| 42039      | Standard Class |
+| 42040      | Second Class   |
+| 42041      | Standard Class |
+| 42042      | Standard Class |
+| 42043      | First Class    |
+| 42046      | Second Class   |
+| 42048      | Second Class   |
+| 42049      | Second Class   |
+| 42051      | Standard Class |
+| 42053      | Second Class   |
+| 42054      | Standard Class |
+| 42055      | Standard Class |
+| 42056      | Standard Class |
+| 42057      | Standard Class |
+| 42058      | Second Class   |
+| 42059      | Second Class   |
+| 42060      | Standard Class |
+| 42062      | Standard Class |
+| 42063      | First Class    |
+| 42064      | Standard Class |
+| 42065      | Second Class   |
+| 42066      | Second Class   |
+| 42067      | Standard Class |
+| 42068      | Same Day       |
+| 42069      | Standard Class |
+| 42070      | Standard Class |
+| 42072      | Standard Class |
+| 42073      | Same Day       |
+| 42074      | Standard Class |
+| 42075      | Standard Class |
+| 42076      | Standard Class |
+| 42078      | First Class    |
+| 42080      | Standard Class |
+| 42081      | Second Class   |
+| 42082      | Second Class   |
+| 42083      | First Class    |
+| 42084      | Standard Class |
+| 42085      | Standard Class |
+| 42086      | First Class    |
+| 42087      | Standard Class |
+| 42088      | Standard Class |
+| 42089      | Standard Class |
+| 42090      | First Class    |
+| 42091      | Second Class   |
+| 42092      | Standard Class |
+| 42093      | Standard Class |
+| 42094      | Second Class   |
+| 42096      | Standard Class |
+| 42097      | Second Class   |
+| 42098      | Same Day       |
+| 42099      | Standard Class |
+| 42100      | Same Day       |
+| 42101      | Standard Class |
+| 42102      | Standard Class |
+| 42103      | Standard Class |
+| 42104      | Standard Class |
+| 42105      | Standard Class |
+| 42108      | Standard Class |
+| 42109      | Standard Class |
+| 42110      | Standard Class |
+| 42111      | Standard Class |
+| 42112      | First Class    |
+| 42113      | Standard Class |
+| 42114      | Second Class   |
+| 42115      | Standard Class |
+| 42116      | Standard Class |
+| 42117      | Second Class   |
+| 42118      | Standard Class |
+| 42119      | Standard Class |
+| 42120      | Standard Class |
+| 42122      | Second Class   |
+| 42123      | Standard Class |
+| 42124      | Standard Class |
+| 42125      | First Class    |
+| 42126      | Standard Class |
+| 42127      | Standard Class |
+| 42128      | Second Class   |
+| 42129      | Standard Class |
+| 42130      | Standard Class |
+| 42131      | Standard Class |
+| 42132      | Standard Class |
+| 42133      | Second Class   |
+| 42134      | First Class    |
+| 42135      | Standard Class |
+| 42136      | Standard Class |
+| 42137      | Standard Class |
+| 42138      | Standard Class |
+| 42139      | Standard Class |
+| 42140      | Same Day       |
+| 42141      | First Class    |
+| 42142      | Standard Class |
+| 42143      | Standard Class |
+| 42144      | Second Class   |
+| 42145      | Standard Class |
+| 42146      | Standard Class |
+| 42148      | Standard Class |
+| 42149      | Standard Class |
+| 42150      | Second Class   |
+| 42151      | Second Class   |
+| 42152      | Standard Class |
+| 42153      | Standard Class |
+| 42154      | Standard Class |
+| 42155      | Standard Class |
+| 42156      | Standard Class |
+| 42157      | First Class    |
+| 42158      | Standard Class |
+| 42159      | Same Day       |
+| 42160      | Standard Class |
+| 42162      | Standard Class |
+| 42163      | Second Class   |
+| 42164      | Second Class   |
+| 42165      | Standard Class |
+| 42166      | Second Class   |
+| 42167      | First Class    |
+| 42168      | Standard Class |
+| 42169      | First Class    |
+| 42170      | Standard Class |
+| 42171      | Standard Class |
+| 42172      | Standard Class |
+| 42173      | Standard Class |
+| 42174      | Standard Class |
+| 42175      | Standard Class |
+| 42177      | Standard Class |
+| 42178      | Standard Class |
+| 42179      | Standard Class |
+| 42180      | Second Class   |
+| 42181      | Second Class   |
+| 42182      | Standard Class |
+| 42183      | Standard Class |
+| 42184      | Second Class   |
+| 42185      | Standard Class |
+| 42186      | Standard Class |
+| 42187      | Same Day       |
+| 42188      | First Class    |
+| 42189      | Standard Class |
+| 42190      | First Class    |
+| 42191      | Standard Class |
+| 42193      | Standard Class |
+| 42194      | Standard Class |
+| 42195      | Standard Class |
+| 42196      | Standard Class |
+| 42197      | First Class    |
+| 42198      | Standard Class |
+| 42199      | Standard Class |
+| 42200      | Second Class   |
+| 42201      | Same Day       |
+| 42202      | Second Class   |
+| 42203      | Standard Class |
+| 42204      | Second Class   |
+| 42205      | First Class    |
+| 42206      | First Class    |
+| 42207      | Standard Class |
+| 42209      | Standard Class |
+| 42210      | Second Class   |
+| 42211      | Second Class   |
+| 42212      | Second Class   |
+| 42213      | First Class    |
+| 42214      | Standard Class |
+| 42215      | Standard Class |
+| 42216      | First Class    |
+| 42217      | First Class    |
+| 42218      | Standard Class |
+| 42219      | Second Class   |
+| 42221      | Second Class   |
+| 42222      | Standard Class |
+| 42223      | Standard Class |
+| 42224      | First Class    |
+| 42225      | First Class    |
+| 42226      | Second Class   |
+| 42227      | Standard Class |
+| 42228      | First Class    |
+| 42229      | Second Class   |
+| 42230      | Standard Class |
+| 42231      | Standard Class |
+| 42232      | Standard Class |
+| 42233      | Standard Class |
+| 42235      | Standard Class |
+| 42236      | Standard Class |
+| 42237      | Standard Class |
+| 42238      | Standard Class |
+| 42239      | First Class    |
+| 42241      | First Class    |
+| 42242      | Standard Class |
+| 42244      | Standard Class |
+| 42246      | Standard Class |
+| 42247      | Standard Class |
+| 42248      | Standard Class |
+| 42249      | First Class    |
+| 42251      | Second Class   |
+| 42252      | Standard Class |
+| 42254      | Standard Class |
+| 42255      | Standard Class |
+| 42256      | Standard Class |
+| 42257      | Standard Class |
+| 42258      | Standard Class |
+| 42259      | Standard Class |
+| 42260      | Standard Class |
+| 42261      | Standard Class |
+| 42262      | Same Day       |
+| 42263      | Standard Class |
+| 42264      | Second Class   |
+| 42265      | Standard Class |
+| 42266      | Second Class   |
+| 42267      | First Class    |
+| 42268      | Standard Class |
+| 42269      | Second Class   |
+| 42270      | First Class    |
+| 42271      | Second Class   |
+| 42272      | First Class    |
+| 42273      | Standard Class |
+| 42274      | Second Class   |
+| 42275      | Second Class   |
+| 42276      | Second Class   |
+| 42277      | Standard Class |
+| 42278      | First Class    |
+| 42279      | Standard Class |
+| 42280      | Standard Class |
+| 42281      | Standard Class |
+| 42282      | Second Class   |
+| 42283      | Second Class   |
+| 42284      | First Class    |
+| 42285      | Standard Class |
+| 42286      | Second Class   |
+| 42288      | First Class    |
+| 42289      | Standard Class |
+| 42290      | Standard Class |
+| 42291      | First Class    |
+| 42292      | Same Day       |
+| 42294      | Standard Class |
+| 42295      | Standard Class |
+| 42297      | Standard Class |
+| 42299      | Standard Class |
+| 42300      | Same Day       |
+| 42301      | Standard Class |
+| 42302      | Same Day       |
+| 42303      | Standard Class |
+| 42304      | Second Class   |
+| 42305      | Standard Class |
+| 42306      | Standard Class |
+| 42307      | Standard Class |
+| 42308      | Same Day       |
+| 42309      | Second Class   |
+| 42310      | Same Day       |
+| 42311      | Standard Class |
+| 42312      | Standard Class |
+| 42313      | Standard Class |
+| 42314      | Standard Class |
+| 42315      | Standard Class |
+| 42316      | Standard Class |
+| 42317      | Second Class   |
+| 42318      | Second Class   |
+| 42319      | Standard Class |
+| 42320      | Standard Class |
+| 42321      | Standard Class |
+| 42322      | Standard Class |
+| 42323      | Standard Class |
+| 42325      | Standard Class |
+| 42326      | Second Class   |
+| 42327      | Standard Class |
+| 42328      | Standard Class |
+| 42329      | Second Class   |
+| 42330      | Standard Class |
+| 42331      | Second Class   |
+| 42332      | Standard Class |
+| 42333      | Standard Class |
+| 42334      | Standard Class |
+| 42335      | Standard Class |
+| 42336      | Standard Class |
+| 42337      | Standard Class |
+| 42338      | Standard Class |
+| 42339      | Standard Class |
+| 42340      | Standard Class |
+| 42341      | Standard Class |
+| 42342      | Standard Class |
+| 42343      | Standard Class |
+| 42344      | Same Day       |
+| 42345      | Standard Class |
+| 42346      | Standard Class |
+| 42347      | First Class    |
+| 42348      | Standard Class |
+| 42349      | Standard Class |
+| 42350      | Standard Class |
+| 42351      | Standard Class |
+| 42352      | Standard Class |
+| 42353      | Second Class   |
+| 42354      | Standard Class |
+| 42355      | Standard Class |
+| 42356      | Same Day       |
+| 42357      | Standard Class |
+| 42358      | First Class    |
+| 42359      | Second Class   |
+| 42360      | Standard Class |
+| 42361      | Standard Class |
+| 42362      | Standard Class |
+| 42363      | Standard Class |
+| 42364      | First Class    |
+| 42365      | First Class    |
+| 42366      | Standard Class |
+| 42367      | Standard Class |
+| 42368      | First Class    |
+| 42369      | Standard Class |
+| 42370      | Standard Class |
+| 42371      | Standard Class |
+| 42372      | Second Class   |
+| 42373      | Standard Class |
+| 42374      | Standard Class |
+| 42376      | Second Class   |
+| 42377      | Standard Class |
+| 42378      | Standard Class |
+| 42380      | Standard Class |
+| 42381      | Standard Class |
+| 42382      | Second Class   |
+| 42384      | Standard Class |
+| 42386      | Standard Class |
+| 42388      | Standard Class |
+| 42389      | Second Class   |
+| 42390      | Standard Class |
+| 42392      | Second Class   |
+| 42395      | Second Class   |
+| 42396      | First Class    |
+| 42397      | Standard Class |
+| 42398      | Standard Class |
+| 42400      | First Class    |
+| 42401      | Second Class   |
+| 42402      | Second Class   |
+| 42403      | Standard Class |
+| 42404      | Standard Class |
+| 42405      | Same Day       |
+| 42406      | Standard Class |
+| 42407      | Same Day       |
+| 42408      | Standard Class |
+| 42409      | First Class    |
+| 42410      | Standard Class |
+| 42411      | Second Class   |
+| 42413      | First Class    |
+| 42414      | First Class    |
+| 42415      | First Class    |
+| 42418      | Standard Class |
+| 42419      | Standard Class |
+| 42420      | Standard Class |
+| 42422      | Standard Class |
+| 42423      | Second Class   |
+| 42424      | Standard Class |
+| 42425      | Standard Class |
+| 42426      | Second Class   |
+| 42427      | Second Class   |
+| 42428      | Standard Class |
+| 42430      | First Class    |
+| 42431      | Standard Class |
+| 42432      | Same Day       |
+| 42433      | Standard Class |
+| 42434      | Standard Class |
+| 42435      | First Class    |
+| 42437      | Same Day       |
+| 42439      | Standard Class |
+| 42440      | Standard Class |
+| 42441      | Standard Class |
+| 42442      | First Class    |
+| 42443      | Standard Class |
+| 42444      | Standard Class |
+| 42445      | First Class    |
+| 42446      | Standard Class |
+| 42447      | Standard Class |
+| 42448      | Standard Class |
+| 42449      | Standard Class |
+| 42450      | Second Class   |
+| 42451      | Second Class   |
+| 42452      | Standard Class |
+| 42453      | Standard Class |
+| 42454      | First Class    |
+| 42455      | First Class    |
+| 42456      | First Class    |
+| 42457      | Standard Class |
+| 42459      | Standard Class |
+| 42460      | First Class    |
+| 42461      | First Class    |
+| 42462      | Second Class   |
+| 42463      | Second Class   |
+| 42465      | Standard Class |
+| 42466      | Standard Class |
+| 42467      | Standard Class |
+| 42468      | Standard Class |
+| 42469      | First Class    |
+| 42470      | Second Class   |
+| 42471      | First Class    |
+| 42472      | First Class    |
+| 42473      | Standard Class |
+| 42474      | Same Day       |
+| 42475      | Standard Class |
+| 42476      | Standard Class |
+| 42477      | Second Class   |
+| 42478      | Standard Class |
+| 42479      | Standard Class |
+| 42480      | Standard Class |
+| 42481      | Standard Class |
+| 42482      | Standard Class |
+| 42483      | Standard Class |
+| 42484      | Second Class   |
+| 42485      | Standard Class |
+| 42486      | Standard Class |
+| 42487      | Standard Class |
+| 42488      | Standard Class |
+| 42489      | Second Class   |
+| 42490      | Second Class   |
+| 42491      | First Class    |
+| 42492      | Standard Class |
+| 42494      | Standard Class |
+| 42495      | Standard Class |
+| 42496      | First Class    |
+| 42497      | Standard Class |
+| 42498      | Same Day       |
+| 42499      | Standard Class |
+| 42500      | Standard Class |
+| 42501      | Standard Class |
+| 42502      | First Class    |
+| 42503      | Second Class   |
+| 42504      | Standard Class |
+| 42505      | Standard Class |
+| 42506      | Standard Class |
+| 42507      | Standard Class |
+| 42508      | First Class    |
+| 42509      | Standard Class |
+| 42510      | Same Day       |
+| 42511      | Standard Class |
+| 42512      | Same Day       |
+| 42513      | First Class    |
+| 42514      | Standard Class |
+| 42515      | Standard Class |
+| 42516      | Same Day       |
+| 42517      | Standard Class |
+| 42518      | Standard Class |
+| 42519      | Second Class   |
+| 42520      | Standard Class |
+| 42521      | First Class    |
+| 42522      | Second Class   |
+| 42523      | Standard Class |
+| 42524      | Standard Class |
+| 42525      | Standard Class |
+| 42526      | First Class    |
+| 42527      | First Class    |
+| 42528      | First Class    |
+| 42530      | Second Class   |
+| 42531      | First Class    |
+| 42532      | Standard Class |
+| 42533      | First Class    |
+| 42534      | Standard Class |
+| 42535      | Second Class   |
+| 42536      | First Class    |
+| 42537      | Second Class   |
+| 42538      | First Class    |
+| 42539      | First Class    |
+| 42540      | First Class    |
+| 42541      | First Class    |
+| 42542      | First Class    |
+| 42543      | Standard Class |
+| 42544      | Standard Class |
+| 42545      | Standard Class |
+| 42546      | Standard Class |
+| 42547      | Standard Class |
+| 42548      | Second Class   |
+| 42549      | Standard Class |
+| 42550      | Second Class   |
+| 42551      | Standard Class |
+| 42552      | Standard Class |
+| 42553      | Standard Class |
+| 42554      | Standard Class |
+| 42555      | Same Day       |
+| 42557      | First Class    |
+| 42558      | Second Class   |
+| 42559      | Same Day       |
+| 42560      | Second Class   |
+| 42561      | Second Class   |
+| 42562      | Standard Class |
+| 42563      | Standard Class |
+| 42564      | Standard Class |
+| 42565      | Standard Class |
+| 42567      | Standard Class |
+| 42568      | First Class    |
+| 42569      | Second Class   |
+| 42570      | Standard Class |
+| 42571      | Second Class   |
+| 42572      | Standard Class |
+| 42573      | Standard Class |
+| 42574      | Standard Class |
+| 42575      | Second Class   |
+| 42576      | Standard Class |
+| 42577      | Standard Class |
+| 42578      | Standard Class |
+| 42579      | Standard Class |
+| 42580      | Standard Class |
+| 42582      | Standard Class |
+| 42583      | Same Day       |
+| 42584      | Standard Class |
+| 42585      | Standard Class |
+| 42586      | Standard Class |
+| 42587      | First Class    |
+| 42588      | Second Class   |
+| 42589      | First Class    |
+| 42590      | Standard Class |
+| 42592      | Second Class   |
+| 42593      | Standard Class |
+| 42594      | Same Day       |
+| 42595      | Standard Class |
+| 42596      | Standard Class |
+| 42597      | Second Class   |
+| 42598      | Standard Class |
+| 42599      | Second Class   |
+| 42600      | Second Class   |
+| 42601      | First Class    |
+| 42602      | Second Class   |
+| 42603      | Standard Class |
+| 42604      | Standard Class |
+| 42605      | Second Class   |
+| 42606      | Standard Class |
+| 42608      | Standard Class |
+| 42609      | First Class    |
+| 42610      | Standard Class |
+| 42611      | Second Class   |
+| 42612      | Standard Class |
+| 42613      | First Class    |
+| 42614      | First Class    |
+| 42615      | Standard Class |
+| 42616      | First Class    |
+| 42617      | First Class    |
+| 42618      | First Class    |
+| 42619      | First Class    |
+| 42620      | Second Class   |
+| 42621      | First Class    |
+| 42622      | Second Class   |
+| 42623      | Second Class   |
+| 42624      | Standard Class |
+| 42625      | Second Class   |
+| 42626      | Second Class   |
+| 42627      | Second Class   |
+| 42628      | Standard Class |
+| 42629      | Standard Class |
+| 42630      | Standard Class |
+| 42631      | Standard Class |
+| 42632      | Same Day       |
+| 42633      | Standard Class |
+| 42634      | First Class    |
+| 42635      | Standard Class |
+| 42636      | Standard Class |
+| 42637      | Standard Class |
+| 42638      | Standard Class |
+| 42639      | Second Class   |
+| 42640      | Standard Class |
+| 42641      | Second Class   |
+| 42642      | Standard Class |
+| 42643      | First Class    |
+| 42644      | First Class    |
+| 42645      | First Class    |
+| 42646      | Standard Class |
+| 42647      | Same Day       |
+| 42648      | Standard Class |
+| 42649      | Second Class   |
+| 42650      | Standard Class |
+| 42651      | Standard Class |
+| 42652      | First Class    |
+| 42653      | First Class    |
+| 42654      | Second Class   |
+| 42655      | Standard Class |
+| 42656      | Standard Class |
+| 42657      | Standard Class |
+| 42658      | Standard Class |
+| 42660      | Standard Class |
+| 42661      | Standard Class |
+| 42662      | Standard Class |
+| 42663      | First Class    |
+| 42664      | Same Day       |
+| 42665      | Standard Class |
+| 42666      | First Class    |
+| 42667      | First Class    |
+| 42668      | Standard Class |
+| 42669      | Standard Class |
+| 42670      | Standard Class |
+| 42671      | Same Day       |
+| 42672      | First Class    |
+| 42674      | First Class    |
+| 42675      | Standard Class |
+| 42676      | Standard Class |
+| 42677      | Standard Class |
+| 42678      | Same Day       |
+| 42679      | Standard Class |
+| 42680      | Standard Class |
+| 42681      | Standard Class |
+| 42682      | Second Class   |
+| 42683      | First Class    |
+| 42684      | Standard Class |
+| 42685      | Second Class   |
+| 42686      | First Class    |
+| 42687      | Second Class   |
+| 42688      | Standard Class |
+| 42689      | Second Class   |
+| 42690      | Standard Class |
+| 42691      | Standard Class |
+| 42692      | Standard Class |
+| 42693      | Standard Class |
+| 42694      | Standard Class |
+| 42695      | Second Class   |
+| 42696      | First Class    |
+| 42697      | Standard Class |
+| 42698      | Standard Class |
+| 42699      | Standard Class |
+| 42700      | Standard Class |
+| 42701      | Standard Class |
+| 42702      | Standard Class |
+| 42703      | First Class    |
+| 42704      | First Class    |
+| 42705      | Standard Class |
+| 42706      | Standard Class |
+| 42707      | Standard Class |
+| 42708      | Second Class   |
+| 42709      | Standard Class |
+| 42710      | First Class    |
+| 42711      | First Class    |
+| 42712      | Standard Class |
+| 42713      | Standard Class |
+| 42714      | Standard Class |
+| 42715      | Same Day       |
+| 42716      | Second Class   |
+| 42717      | Standard Class |
+| 42718      | Second Class   |
+| 42719      | Second Class   |
+| 42720      | Second Class   |
+| 42721      | Standard Class |
+| 42722      | Standard Class |
+| 42723      | Standard Class |
+| 42724      | Second Class   |
+| 42725      | Standard Class |
+| 42726      | Standard Class |
+| 42727      | Standard Class |
+| 42728      | First Class    |
+| 42729      | Second Class   |
+| 42730      | Standard Class |
+| 42731      | First Class    |
+| 42732      | Second Class   |
+| 42733      | Standard Class |
+| 42734      | Standard Class |
+| 42735      | Standard Class |
+| 42736      | First Class    |
+| 42737      | Standard Class |
+| 42738      | Standard Class |
+| 42739      | First Class    |
+| 42740      | Standard Class |
+| 42741      | Standard Class |
+| 42742      | Standard Class |
+| 42743      | Standard Class |
+| 42744      | Second Class   |
+| 42745      | First Class    |
+| 42746      | First Class    |
+| 42748      | Standard Class |
+| 42750      | First Class    |
+| 42751      | First Class    |
+| 42752      | Second Class   |
+| 42753      | First Class    |
+| 42754      | Standard Class |
+| 42755      | Standard Class |
+| 42756      | First Class    |
+| 42758      | Second Class   |
+| 42759      | Second Class   |
+| 42760      | First Class    |
+| 42761      | Standard Class |
+| 42762      | Standard Class |
+| 42763      | Standard Class |
+| 42764      | Standard Class |
+| 42765      | Second Class   |
+| 42766      | Second Class   |
+| 42767      | Standard Class |
+| 42768      | Standard Class |
+| 42770      | Standard Class |
+| 42771      | First Class    |
+| 42772      | Standard Class |
+| 42773      | Standard Class |
+| 42774      | Standard Class |
+| 42775      | First Class    |
+| 42777      | Standard Class |
+| 42778      | Standard Class |
+| 42779      | First Class    |
+| 42780      | Second Class   |
+| 42781      | Standard Class |
+| 42783      | Standard Class |
+| 42785      | Standard Class |
+| 42786      | Standard Class |
+| 42787      | Second Class   |
+| 42788      | Standard Class |
+| 42789      | First Class    |
+| 42791      | Standard Class |
+| 42792      | Standard Class |
+| 42793      | Standard Class |
+| 42794      | Second Class   |
+| 42795      | Standard Class |
+| 42796      | Standard Class |
+| 42799      | Same Day       |
+| 42800      | Second Class   |
+| 42801      | Standard Class |
+| 42802      | Standard Class |
+| 42803      | Standard Class |
+| 42804      | Standard Class |
+| 42805      | First Class    |
+| 42806      | Standard Class |
+| 42807      | Standard Class |
+| 42808      | Standard Class |
+| 42809      | Standard Class |
+| 42810      | Standard Class |
+| 42811      | Standard Class |
+| 42812      | Second Class   |
+| 42813      | Standard Class |
+| 42814      | Standard Class |
+| 42815      | Second Class   |
+| 42816      | Second Class   |
+| 42817      | Standard Class |
+| 42818      | Standard Class |
+| 42819      | Second Class   |
+| 42820      | First Class    |
+| 42821      | First Class    |
+| 42822      | Second Class   |
+| 42823      | Standard Class |
+| 42824      | Second Class   |
+| 42825      | Standard Class |
+| 42826      | Second Class   |
+| 42827      | Second Class   |
+| 42828      | First Class    |
+| 42829      | Standard Class |
+| 42830      | Standard Class |
+| 42831      | Standard Class |
+| 42832      | Standard Class |
+| 42833      | Standard Class |
+| 42835      | Same Day       |
+| 42836      | First Class    |
+| 42837      | Standard Class |
+| 42839      | Standard Class |
+| 42840      | Standard Class |
+| 42841      | Standard Class |
+| 42842      | First Class    |
+| 42843      | First Class    |
+| 42844      | Standard Class |
+| 42845      | Standard Class |
+| 42846      | Standard Class |
+| 42847      | Standard Class |
+| 42848      | Standard Class |
+| 42849      | First Class    |
+| 42850      | Second Class   |
+| 42851      | Standard Class |
+| 42852      | Standard Class |
+| 42853      | Standard Class |
+| 42854      | Standard Class |
+| 42855      | Standard Class |
+| 42856      | Standard Class |
+| 42857      | First Class    |
+| 42859      | Second Class   |
+| 42860      | Second Class   |
+| 42861      | Standard Class |
+| 42862      | Standard Class |
+| 42863      | Standard Class |
+| 42864      | Standard Class |
+| 42865      | Standard Class |
+| 42866      | Standard Class |
+| 42867      | Standard Class |
+| 42868      | First Class    |
+| 42869      | Same Day       |
+| 42870      | Second Class   |
+| 42871      | Standard Class |
+| 42872      | Standard Class |
+| 42873      | Second Class   |
+| 42874      | First Class    |
+| 42875      | Standard Class |
+| 42876      | Standard Class |
+| 42877      | Standard Class |
+| 42878      | Standard Class |
+| 42879      | Standard Class |
+| 42880      | Standard Class |
+| 42881      | Standard Class |
+| 42882      | Standard Class |
+| 42884      | Second Class   |
+| 42885      | Second Class   |
+| 42886      | Standard Class |
+| 42887      | Standard Class |
+| 42888      | Standard Class |
+| 42889      | Same Day       |
+| 42890      | Standard Class |
+| 42891      | Second Class   |
+| 42892      | Standard Class |
+| 42893      | Standard Class |
+| 42894      | Standard Class |
+| 42895      | Standard Class |
+| 42896      | Second Class   |
+| 42897      | Same Day       |
+| 42898      | Standard Class |
+| 42899      | First Class    |
+| 42900      | Standard Class |
+| 42901      | Standard Class |
+| 42902      | First Class    |
+| 42903      | Standard Class |
+| 42904      | Standard Class |
+| 42905      | Standard Class |
+| 42906      | First Class    |
+| 42907      | Second Class   |
+| 42908      | Standard Class |
+| 42909      | Standard Class |
+| 42911      | Second Class   |
+| 42912      | Standard Class |
+| 42913      | Standard Class |
+| 42914      | Standard Class |
+| 42915      | Standard Class |
+| 42916      | Same Day       |
+| 42917      | Standard Class |
+| 42918      | Standard Class |
+| 42919      | Second Class   |
+| 42920      | Standard Class |
+| 42921      | Standard Class |
+| 42922      | Second Class   |
+| 42923      | Standard Class |
+| 42924      | Standard Class |
+| 42925      | Second Class   |
+| 42926      | Standard Class |
+| 42927      | First Class    |
+| 42928      | Standard Class |
+| 42929      | Standard Class |
+| 42930      | Standard Class |
+| 42931      | Standard Class |
+| 42932      | Standard Class |
+| 42933      | Second Class   |
+| 42934      | Second Class   |
+| 42935      | Standard Class |
+| 42937      | Standard Class |
+| 42938      | Standard Class |
+| 42939      | Standard Class |
+| 42940      | Standard Class |
+| 42941      | Standard Class |
+| 42942      | Standard Class |
+| 42943      | Standard Class |
+| 42944      | Standard Class |
+| 42945      | Standard Class |
+| 42946      | Standard Class |
+| 42947      | Standard Class |
+| 42948      | Second Class   |
+| 42949      | Standard Class |
+| 42950      | Second Class   |
+| 42951      | First Class    |
+| 42952      | Standard Class |
+| 42953      | Second Class   |
+| 42954      | Standard Class |
+| 42955      | First Class    |
+| 42956      | Standard Class |
+| 42957      | Second Class   |
+| 42958      | Second Class   |
+| 42959      | Standard Class |
+| 42960      | Same Day       |
+| 42962      | Standard Class |
+| 42963      | Second Class   |
+| 42964      | Standard Class |
+| 42965      | Second Class   |
+| 42966      | First Class    |
+| 42967      | Same Day       |
+| 42968      | Standard Class |
+| 42969      | Standard Class |
+| 42970      | Second Class   |
+| 42971      | First Class    |
+| 42972      | Standard Class |
+| 42973      | Second Class   |
+| 42974      | Standard Class |
+| 42975      | Standard Class |
+| 42976      | Standard Class |
+| 42977      | First Class    |
+| 42978      | Standard Class |
+| 42979      | Standard Class |
+| 42980      | Second Class   |
+| 42981      | Standard Class |
+| 42982      | Second Class   |
+| 42983      | Standard Class |
+| 42984      | Standard Class |
+| 42985      | Standard Class |
+| 42986      | Second Class   |
+| 42987      | Second Class   |
+| 42988      | Same Day       |
+| 42989      | Standard Class |
+| 42990      | First Class    |
+| 42991      | Standard Class |
+| 42992      | Standard Class |
+| 42993      | Standard Class |
+| 42994      | Standard Class |
+| 42995      | Second Class   |
+| 42996      | First Class    |
+| 42997      | Standard Class |
+| 42998      | Standard Class |
+| 42999      | Second Class   |
+| 43000      | Standard Class |
+| 43001      | Standard Class |
+| 43002      | Second Class   |
+| 43003      | Second Class   |
+| 43004      | Second Class   |
+| 43005      | Standard Class |
+| 43006      | Standard Class |
+| 43007      | Standard Class |
+| 43008      | Second Class   |
+| 43009      | Standard Class |
+| 43010      | First Class    |
+| 43011      | First Class    |
+| 43012      | Standard Class |
+| 43013      | Standard Class |
+| 43014      | Standard Class |
+| 43015      | Standard Class |
+| 43016      | Standard Class |
+| 43017      | Standard Class |
+| 43018      | First Class    |
+| 43019      | Standard Class |
+| 43020      | Same Day       |
+| 43021      | Standard Class |
+| 43022      | Standard Class |
+| 43023      | First Class    |
+| 43024      | Standard Class |
+| 43025      | Standard Class |
+| 43026      | Second Class   |
+| 43027      | Second Class   |
+| 43028      | Same Day       |
+| 43029      | Standard Class |
+| 43030      | First Class    |
+| 43031      | Second Class   |
+| 43032      | Standard Class |
+| 43033      | Standard Class |
+| 43034      | Standard Class |
+| 43035      | Standard Class |
+| 43036      | Second Class   |
+| 43037      | Standard Class |
+| 43038      | Second Class   |
+| 43039      | Second Class   |
+| 43040      | First Class    |
+| 43041      | Standard Class |
+| 43042      | Standard Class |
+| 43043      | Same Day       |
+| 43044      | Second Class   |
+| 43045      | First Class    |
+| 43046      | Standard Class |
+| 43047      | Standard Class |
+| 43048      | Standard Class |
+| 43049      | Standard Class |
+| 43050      | Second Class   |
+| 43051      | Standard Class |
+| 43052      | Standard Class |
+| 43053      | Standard Class |
+| 43054      | Second Class   |
+| 43055      | First Class    |
+| 43056      | Second Class   |
+| 43057      | Standard Class |
+| 43058      | Standard Class |
+| 43059      | First Class    |
+| 43060      | First Class    |
+| 43061      | First Class    |
+| 43062      | Standard Class |
+| 43063      | Standard Class |
+| 43064      | Standard Class |
+| 43065      | Second Class   |
+| 43066      | First Class    |
+| 43067      | Standard Class |
+| 43068      | First Class    |
+| 43069      | Standard Class |
+| 43070      | First Class    |
+| 43071      | Second Class   |
+| 43072      | Second Class   |
+| 43073      | Standard Class |
+| 43074      | Standard Class |
+| 43075      | Standard Class |
+| 43076      | Standard Class |
+| 43077      | First Class    |
+| 43078      | Standard Class |
+| 43079      | First Class    |
+| 43080      | First Class    |
+| 43081      | Standard Class |
+| 43082      | Standard Class |
+| 43083      | Standard Class |
+| 43084      | Standard Class |
+| 43085      | Standard Class |
+| 43086      | Standard Class |
+| 43087      | Standard Class |
+| 43088      | First Class    |
+| 43089      | First Class    |
+| 43090      | Second Class   |
+| 43091      | Standard Class |
+| 43092      | Same Day       |
+| 43093      | Standard Class |
+| 43094      | Standard Class |
+| 43095      | Standard Class |
+| 43096      | Standard Class |
+| 43097      | Standard Class |
+| 43098      | Standard Class |
+| 43099      | Standard Class |
+| 43100      | Standard Class |
+| 43101      | Standard Class |
+| 43102      | Second Class   |
+| 43103      | Standard Class |
+| 43104      | Standard Class |
+| 43105      | Standard Class |
++------------+----------------+
+1329 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > select * from modoenvio limit 10;
++------------+----------------+
+| ShipModeID | ShipModeName   |
++------------+----------------+
+| 41646      | First Class    |
+| 41647      | Standard Class |
+| 41649      | Standard Class |
+| 41651      | Standard Class |
+| 41652      | Standard Class |
+| 41653      | First Class    |
+| 41654      | Second Class   |
+| 41655      | Second Class   |
+| 41656      | First Class    |
+| 41657      | Second Class   |
++------------+----------------+
+10 rows in set (0.0008 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > alter database rename pruebas to orders;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'rename pruebas to orders' at line 1
+ MySQL  localhost:3306 ssl  prueba1  SQL > select * from categoria limit 10;
+ERROR: 1146 (42S02): Table 'prueba1.categoria' doesn't exist
+ MySQL  localhost:3306 ssl  prueba1  SQL > show tables ;
++-------------------+
+| Tables_in_prueba1 |
++-------------------+
+| categorias        |
+| clientes          |
+| detallespedido    |
+| modoenvio         |
+| pedidos           |
+| productos         |
+| subcategorias     |
+| ubicaciones       |
++-------------------+
+8 rows in set (0.0059 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > select * from categorias limit 10;
++-----------------+--------------+
+| CategoryID      | CategoryName |
++-----------------+--------------+
+| Furniture       | Bookcases    |
+| Office Supplies | Labels       |
+| Technology      | Phones       |
++-----------------+--------------+
+3 rows in set (0.0018 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > mysqldump -u root -p prubas1 > backup.sql
+                                        -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'mysqldump -u root -p prubas1 > backup.sql' at line 1
+ MySQL  localhost:3306 ssl  prueba1  SQL > mysqldump -u root -p prubas1;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'mysqldump -u root -p prubas1' at line 1
+ MySQL  localhost:3306 ssl  prueba1  SQL > mysqldump -u localhost -p prubas1;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'mysqldump -u localhost -p prubas1' at line 1
+ MySQL  localhost:3306 ssl  prueba1  SQL > mysql -u localhost -p prubas1;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'mysql -u localhost -p prubas1' at line 1
+ MySQL  localhost:3306 ssl  prueba1  SQL > mysqldump -u root -p prubas1 > examen.sql --events;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'mysqldump -u root -p prubas1 > examen.sql --events' at line 1
+ MySQL  localhost:3306 ssl  prueba1  SQL >

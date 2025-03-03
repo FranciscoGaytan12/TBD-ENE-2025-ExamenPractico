@@ -1,0 +1,143 @@
+MySQL Shell 8.0.41
+
+Copyright (c) 2016, 2025, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \c --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 30
+Server version: 8.0.41 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > use prueba1
+Default schema set to `prueba1`.
+Fetching global names, object names from `prueba1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  prueba1  SQL > select * from ubicaciones limit 20;
++------------+---------------+---------------+---------------+--------+
+| PostalCode | City          | State         | Country       | Region |
++------------+---------------+---------------+---------------+--------+
+| 05408      | Burlington    | Vermont       | United States | East   |
+| 10009      | Furnishings   | New York      | United States | East   |
+| 10011      | New York City | New York      | United States | East   |
+| 10024      | New York City | New York      | United States | East   |
+| 10035      | New York City | New York      | United States | East   |
+| 1040       | Holyoke       | Massachusetts | United States | East   |
+| 10550      | Mount Vernon  | New York      | United States | East   |
+| 10701      | Yonkers       | New York      | United States | East   |
+| 10801      | New Rochelle  | New York      | United States | East   |
+| 11520      | Freeport      | New York      | United States | East   |
+| 11550      | Hempstead     | New York      | United States | East   |
+| 11561      | Long Beach    | New York      | United States | East   |
+| 11572      | Accessories   | New York      | United States | East   |
+| 11757      | Lindenhurst   | New York      | United States | East   |
+| 12180      | Troy          | New York      | United States | East   |
+| 13021      | Auburn        | New York      | United States | East   |
+| 13440      | Rome          | New York      | United States | East   |
+| 13501      | Utica         | New York      | United States | East   |
+| 13601      | Watertown     | New York      | United States | East   |
+| 14215      | Buffalo       | New York      | United States | East   |
++------------+---------------+---------------+---------------+--------+
+20 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  prueba1  SQL > use tarjetas;
+Default schema set to `tarjetas`.
+Fetching global names, object names from `tarjetas` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tarjetas  SQL > show tables,
+                                         -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',' at line 1
+ MySQL  localhost:3306 ssl  tarjetas  SQL > show tables ;
++--------------------+
+| Tables_in_tarjetas |
++--------------------+
+| bancosemisores     |
+| tarjetas           |
+| tipostarjeta       |
+| titulares          |
++--------------------+
+4 rows in set (0.0013 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > drop database tarjetas;
+Query OK, 4 rows affected (0.0427 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > create database tarjetas;
+Query OK, 1 row affected (0.0120 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > drop database tarjetas;
+Query OK, 0 rows affected (0.0155 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > show tables;
+ERROR: 1046 (3D000): No database selected
+ MySQL  localhost:3306 ssl  tarjetas  SQL > use tarjeta
+MySQL Error 1049: Unknown database 'tarjeta'
+ MySQL  localhost:3306 ssl  tarjetas  SQL > use tarjeta;
+MySQL Error 1049: Unknown database 'tarjeta'
+ MySQL  localhost:3306 ssl  tarjetas  SQL > use tarjetas;
+Default schema set to `tarjetas`.
+Fetching global names, object names from `tarjetas` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tarjetas  SQL > show tables;
++--------------------+
+| Tables_in_tarjetas |
++--------------------+
+| bancosemisores     |
+| tarjetas           |
+| tipostarjeta       |
+| titulares          |
++--------------------+
+4 rows in set (0.0036 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > desc tarjetas;
++------------------+---------------+------+-----+---------+----------------+
+| Field            | Type          | Null | Key | Default | Extra          |
++------------------+---------------+------+-----+---------+----------------+
+| TarjetaID        | int           | NO   | PRI | NULL    | auto_increment |
+| TipoTarjetaID    | int           | NO   | MUL | NULL    |                |
+| BancoID          | int           | NO   | MUL | NULL    |                |
+| NumeroTarjeta    | varchar(20)   | NO   | UNI | NULL    |                |
+| TitularID        | int           | NO   | MUL | NULL    |                |
+| CVV              | varchar(10)   | NO   |     | NULL    |                |
+| FechaEmision     | int           | NO   |     | NULL    |                |
+| FechaExpiracion  | int           | NO   |     | NULL    |                |
+| FechaFacturacion | int           | NO   |     | NULL    |                |
+| PIN              | varchar(10)   | NO   |     | NULL    |                |
+| LimiteCredito    | decimal(12,2) | NO   |     | NULL    |                |
++------------------+---------------+------+-----+---------+----------------+
+11 rows in set (0.0055 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > select * from tipostarjetas;
+ERROR: 1146 (42S02): Table 'tarjetas.tipostarjetas' doesn't exist
+ MySQL  localhost:3306 ssl  tarjetas  SQL > select * from tipostarjeta;
++---------------+---------------------------+
+| TipoTarjetaID | NombreTipoTarjeta         |
++---------------+---------------------------+
+|             1 | American Express          |
+|             3 | Diners Club International |
+|             6 | Discover                  |
+|             5 | Japan Credit Bureau       |
+|             2 | Master Card               |
+|             4 | Visa                      |
++---------------+---------------------------+
+6 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > CREATE USER 'admin_user'@'localhost' IDENTIFIED BY 'AdminPass123';
+Query OK, 0 rows affected (0.0450 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > GRANT ALL PRIVILEGES ON *.* TO 'admin_user'@'localhost' WITH GRANT OPTION;
+Query OK, 0 rows affected (0.0222 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > CREATE USER 'developer_user'@'localhost' IDENTIFIED BY 'DevPass123';
+Query OK, 0 rows affected (0.0163 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON my_database.* TO 'developer_user'@'localhost';
+Query OK, 0 rows affected (0.0055 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > CREATE USER 'read_only_user'@'localhost' IDENTIFIED BY 'ReadPass123';
+Query OK, 0 rows affected (0.0147 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > GRANT SELECT ON my_database.* TO 'read_only_user'@'localhost';
+Query OK, 0 rows affected (0.0124 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > CREATE USER 'backup_user'@'localhost' IDENTIFIED BY 'BackupPass123';
+Query OK, 0 rows affected (0.0092 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > GRANT SELECT, LOCK TABLES, SHOW VIEW, EVENT, TRIGGER ON my_database.* TO 'backup_user'@'localhost';
+Query OK, 0 rows affected (0.0131 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > CREATE USER 'guest_user'@'localhost' IDENTIFIED BY 'GuestPass123';
+Query OK, 0 rows affected (0.0149 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL > GRANT SELECT ON my_database.public_table TO 'guest_user'@'localhost';
+ERROR: 1146 (42S02): Table 'my_database.public_table' doesn't exist
+ MySQL  localhost:3306 ssl  tarjetas  SQL > FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.0171 sec)
+ MySQL  localhost:3306 ssl  tarjetas  SQL >
+INSERT INTO Tarjetas (TipoTarjetaID, BancoID, NumeroTarjeta, TitularID, CVV, FechaEmision, FechaExpiracion, FechaFacturacion, PIN, LimiteCredito) VALUES
+(1, 1, '340383198517962', 1, '7758', 42583, 46600, 23, '6065', 27700),
+(2, 2, '5306997581217780', 2, '84', 39356, 41548, 4, '9037', 116400),
+(3, 3, '30945949913123', 3, '568', 39203, 41760, 12, '4358', 67400);
