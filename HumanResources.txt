@@ -1,0 +1,144 @@
+Last login: Sun Mar  2 20:40:05 on ttys000
+/Users/Gerardo/.zshrc:export:1: not valid in this context: export HOMEBREW_PREFIX
+mysqlsh
+Gerardo@192 ~ % mysqlsh
+MySQL Shell 9.2.0
+
+Copyright (c) 2016, 2025, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 9.1.0 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost  SQL > CREATE DATABASE HumanResourcesDB;
+Query OK, 1 row affected (0.0112 sec)
+ MySQL  localhost  SQL > USE HumanResourcesDB;
+Default schema set to `HumanResourcesDB`.
+Fetching global names, object names from `humanresourcesdb` for auto-completion... Press ^C to stop.
+ MySQL  localhost  humanresourcesdb  SQL > CREATE TABLE Employees (
+                                        ->     EmpID INT PRIMARY KEY,
+                                        ->     NamePrefix VARCHAR(10),
+                                        ->     FirstName VARCHAR(50),
+                                        ->     MiddleInitial CHAR(1),
+                                        ->     LastName VARCHAR(50),
+                                        ->     Gender CHAR(1),
+                                        ->     Email VARCHAR(100) UNIQUE,
+                                        ->     DateOfBirth DATE,
+                                        ->     SSN VARCHAR(15) UNIQUE
+                                        -> );
+Query OK, 0 rows affected (0.0220 sec)
+ MySQL  localhost  humanresourcesdb  SQL > CREATE TABLE FamilyInfo (
+                                        ->     FamilyID INT PRIMARY KEY AUTO_INCREMENT,
+                                        ->     EmpID INT,
+                                        ->     FathersName VARCHAR(100),
+                                        ->     MothersName VARCHAR(100),
+                                        ->     MothersMaidenName VARCHAR(100),
+                                        ->     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID) ON DELETE CASCADE
+                                        -> );
+Query OK, 0 rows affected (0.0150 sec)
+ MySQL  localhost  humanresourcesdb  SQL > 
+ MySQL  localhost  humanresourcesdb  SQL > CREATE TABLE ContactLocation (
+                                        ->     ContactID INT PRIMARY KEY AUTO_INCREMENT,
+                                        ->     EmpID INT,
+                                        ->     PhoneNo VARCHAR(20),
+                                        ->     PlaceName VARCHAR(100),
+                                        ->     County VARCHAR(100),
+                                        ->     City VARCHAR(100),
+                                        ->     State CHAR(2),
+                                        ->     ZipCode VARCHAR(10),
+                                        ->     Region VARCHAR(50),
+                                        ->     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID) ON DELETE CASCADE
+                                        -> );
+Query OK, 0 rows affected (0.0146 sec)
+ MySQL  localhost  humanresourcesdb  SQL > CREATE TABLE UserCredentials (
+                                        ->     UserID INT PRIMARY KEY AUTO_INCREMENT,
+                                        ->     EmpID INT UNIQUE,
+                                        ->     UserName VARCHAR(50) UNIQUE,
+                                        ->     PasswordHash VARCHAR(255),
+                                        ->     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID) ON DELETE CASCADE
+                                        -> );
+Query OK, 0 rows affected (0.0162 sec)
+ MySQL  localhost  humanresourcesdb  SQL > CREATE USER 'admin_hr'@'localhost' IDENTIFIED BY 'AdminPass123';
+Query OK, 0 rows affected (0.0200 sec)
+ MySQL  localhost  humanresourcesdb  SQL > CREATE USER 'manager_hr'@'localhost' IDENTIFIED BY 'ManagerPass123';
+Query OK, 0 rows affected (0.0046 sec)
+ MySQL  localhost  humanresourcesdb  SQL > CREATE USER 'staff_hr'@'localhost' IDENTIFIED BY 'StaffPass123';
+Query OK, 0 rows affected (0.0043 sec)
+ MySQL  localhost  humanresourcesdb  SQL > CREATE USER 'analyst_hr'@'localhost' IDENTIFIED BY 'AnalystPass123';
+Query OK, 0 rows affected (0.0044 sec)
+ MySQL  localhost  humanresourcesdb  SQL > CREATE USER 'intern_hr'@'localhost' IDENTIFIED BY 'InternPass123';
+Query OK, 0 rows affected (0.0050 sec)
+ MySQL  localhost  humanresourcesdb  SQL > GRANT ALL PRIVILEGES ON HumanResourcesDB.* TO 'admin_hr'@'localhost';
+Query OK, 0 rows affected (0.0017 sec)
+ MySQL  localhost  humanresourcesdb  SQL > GRANT SELECT, INSERT, UPDATE ON HumanResourcesDB.* TO 'manager_hr'@'localhost';
+Query OK, 0 rows affected (0.0006 sec)
+ MySQL  localhost  humanresourcesdb  SQL > GRANT SELECT, INSERT ON Employees, FamilyInfo, ContactLocation TO 'staff_hr'@'localhost';
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', FamilyInfo, ContactLocation TO 'staff_hr'@'localhost'' at line 1
+ MySQL  localhost  humanresourcesdb  SQL > GRANT SELECT ON Employees, ContactLocation TO 'analyst_hr'@'localhost';
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', ContactLocation TO 'analyst_hr'@'localhost'' at line 1
+ MySQL  localhost  humanresourcesdb  SQL > GRANT SELECT ON Employees TO 'intern_hr'@'localhost';
+Query OK, 0 rows affected (0.0010 sec)
+ MySQL  localhost  humanresourcesdb  SQL > FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.0053 sec)
+ MySQL  localhost  humanresourcesdb  SQL > LOAD DATA INFILE '/Users/Gerardo/Downloads/BD-Alumnos/Employees.csv'
+                                        -> INTO TABLE Employees
+                                        -> FIELDS TERMINATED BY ',' 
+                                        -> ENCLOSED BY '"' 
+                                        -> LINES TERMINATED BY '\n'
+                                        -> IGNORE 1 ROWS;
+ERROR: 1290 (HY000): The MySQL server is running with the --secure-file-priv option so it cannot execute this statement
+ MySQL  localhost  humanresourcesdb  SQL > SHOW VARIABLES LIKE 'secure_file_priv';
++------------------+-------+
+| Variable_name    | Value |
++------------------+-------+
+| secure_file_priv | NULL  |
++------------------+-------+
+1 row in set (0.0307 sec)
+ MySQL  localhost  humanresourcesdb  SQL > LOAD DATA INFILE '/Users/Gerardo/Downloads/BD-Alumnos/Employees.csv'
+                                        -> INTO TABLE Employees
+                                        -> FIELDS TERMINATED BY ',' 
+                                        -> ENCLOSED BY '"' 
+                                        -> LINES TERMINATED BY '\n'
+                                        -> IGNORE 1 ROWS;
+ERROR: 1290 (HY000): The MySQL server is running with the --secure-file-priv option so it cannot execute this statement
+ MySQL  localhost  humanresourcesdb  SQL > LOAD DATA LOCAL INFILE '/Users/Gerardo/Downloads/BD-Alumnos/Employees.csv'
+                                        -> INTO TABLE Employees
+                                        -> FIELDS TERMINATED BY ',' 
+                                        -> ENCLOSED BY '"' 
+                                        -> LINES TERMINATED BY '\n'
+                                        -> IGNORE 1 ROWS;
+ERROR: 3948 (42000): Loading local data is disabled; this must be enabled on both the client and server sides
+ MySQL  localhost  humanresourcesdb  SQL > SHOW GLOBAL VARIABLES LIKE 'local_infile';
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| local_infile  | OFF   |
++---------------+-------+
+1 row in set (0.0123 sec)
+ MySQL  localhost  humanresourcesdb  SQL > SET GLOBAL local_infile = 1;
+Query OK, 0 rows affected (0.0036 sec)
+ MySQL  localhost  humanresourcesdb  SQL > LOAD DATA LOCAL INFILE '/Users/Gerardo/Downloads/BD-Alumnos/Employees.csv'
+                                        -> INTO TABLE Employees
+                                        -> FIELDS TERMINATED BY ',' 
+                                        -> ENCLOSED BY '"' 
+                                        -> LINES TERMINATED BY '\n'
+                                        -> IGNORE 1 ROWS;
+ERROR: 2068 (HY000): LOAD DATA LOCAL INFILE file request rejected due to restrictions on access.
+ MySQL  localhost  humanresourcesdb  SQL > CREATE TABLE ContactLocation (     ContactID INT PRIMARY KEY AUTO_INCREMENT,     EmpID INT,     PhoneNo VARCHAR(20),     PlaceName VARCHAR(100),     County VARCHAR(100),     City VARCHAR(100),     State CHAR(2),     ZipCode VARCHAR(10),     Region VARCHAR(50),     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID) ON DELETE CASCADE );
+Query OK, 0 rows affected (0.0311 sec)
+ MySQL  localhost  humanresourcesdb  SQL > ^C
+ MySQL  localhost  humanresourcesdb  SQL > \exit
+Bye!
+Gerardo@192 ~ % mysqldump -u root -p HumanResourcesDB > HumanResourcesDB_backup.sql       
+Enter password: 
+Gerardo@192 ~ % mysqldump -u root -p HumanResourcesDB > HumanResourcesDB_backup.sql
+Enter password: 
+mysqldump: Got error: 1045: Access denied for user 'root'@'localhost' (using password: YES) when trying to connect
+Gerardo@192 ~ % mysqldump -u root -p HumanResourcesDB > HumanResourcesDB_backup.sql
+Enter password: 
+Gerardo@192 ~ % 
